@@ -20,4 +20,7 @@ void searchByMajor(Student students[], int count);
 void saveStudentsToFile(Student students[], int count);
 void loadStudentsFromFile(Student students[], int *count);
 
+void deleteStudent(Student students[], int *count);
+void searchByName(Student students[], int count);
+void searchByCredits(Student students[], int count);
 #endif

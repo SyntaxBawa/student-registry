@@ -2,7 +2,6 @@
 #include <sys/stat.h>
 #include "student_registry.h"
 
-// Helper tracking system-level file updates
 long long getFileModifiedTime(const char *filename) {
     struct stat attr;
     if (stat(filename, &attr) == 0) {
@@ -34,9 +33,11 @@ int main() {
         printf("1. Add Student\n");
         printf("2. Display All Students\n");
         printf("3. Search by ID\n");
-        printf("4. Search by GPA\n");
-        printf("5. Search by Major\n");
-        printf("7. Exit\n");
+        printf("5. Search by Name\n");
+        printf("6. Search by Major\n");
+        printf("7. Search by GPA\n");
+        printf("8. Search by Credits\n");
+        printf("9. Exit\n");
         printf("Enter your choice: ");
         
         if (scanf("%d", &choice) != 1) {
@@ -66,18 +67,25 @@ int main() {
         else if (choice == 5) {
             searchByMajor(students, count);
         }
+        
         else if (choice == 6) {
-            saveStudentsToFile(students, count);
-            lastModifiedTime = getFileModifiedTime(filename);
+            searchByName(students, count);
         }
         else if (choice == 7) {
+            searchByCredits(students, count);
+        }
+        else if (choice == 8) {
+            deleteStudent(students, &count);
+            lastModifiedTime = getFileModifiedTime(filename);
+        }
+        else if (choice == 9) {
+            saveStudentsToFile(students, count); 
             printf("Exiting program...\n");
         }
         else {
             printf("Invalid choice!\n");
         }
 
-    } while (choice != 7);
-
+    } while (choice != 9);
     return 0;
 }

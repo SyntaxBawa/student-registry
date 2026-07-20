@@ -158,7 +158,6 @@ void saveStudentsToFile(Student students[], int count) {
     }
 
     fclose(file);
-    printf("Student saved successfully!\n");
 }
 
 void loadStudentsFromFile(Student students[], int *count) {
@@ -184,6 +183,83 @@ void loadStudentsFromFile(Student students[], int *count) {
         if (*count >= MAX)
             break;
     }
-
     fclose(file);
+}
+
+void deleteStudent(Student students[], int *count) {
+    int id, foundIndex = -1;
+    printf("Enter Student ID to delete: ");
+    scanf("%d", &id);
+    clearBuffer();
+
+    
+    for (int i = 0; i < *count; i++) {
+        if (students[i].id == id) {
+            foundIndex = i;
+            break;
+        }
+    }
+
+    if (foundIndex == -1) {
+        printf("Student ID not found.\n");
+        return;
+    }
+
+
+    for (int i = foundIndex; i < (*count) - 1; i++) {
+        students[i] = students[i + 1];
+    }
+
+    (*count)--; 
+    saveStudentsToFile(students, *count);
+    printf("Student deleted successfully!\n");
+}
+
+void searchByName(Student students[], int count) {
+    char targetName[100];
+    int found = 0;
+
+    printf("Enter Student Name to search: ");
+    fgets(targetName, sizeof(targetName), stdin);
+    targetName[strcspn(targetName, "\n")] = '\0'; // Remove trailing newline
+
+    printf("\n--- Search Results for Name: \"%s\" ---\n", targetName);
+    for (int i = 0; i < count; i++) {
+        // strstr checks if targetName is contained anywhere inside students[i].name (case-sensitive)
+        if (strstr(students[i].name, targetName) != NULL) {
+            printf("%d | %s | Major: %s | GPA: %.2f | Credits: %d\n",
+                   students[i].id, students[i].name, students[i].major, 
+                   students[i].gpa, students[i].credits);
+            found = 1;
+        }
+    }
+
+    if (!found) {
+        printf("No students found matching that name.\n");
+    }
+    printf("----------------------------------------\n");
+}
+
+void searchByCredits(Student students[], int count) {
+    int targetCredits;
+    int found = 0;
+
+    printf("Enter exact number of credits to search: ");
+    scanf("%d", &targetCredits);
+    clearBuffer();
+
+    printf("\n--- Search Results for Credits: %d ---\n", targetCredits);
+    for (int i = 0; i < count; i++) {
+        if (students[i].credits == targetCredits) {
+            printf("%d | %s | Major: %s | GPA: %.2f | Credits: %d\n",
+                   students[i].id, students[i].name, students[i].major, 
+                   students[i].gpa, students[i].credits);
+            found = 1;
+        }
+    }
+
+    if (!found) {
+        printf("No students found with exactly %d credits.\n", targetCredits);
+    }
+    printf("----------------------------------------\n");
 }
